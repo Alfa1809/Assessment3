@@ -13,7 +13,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.d3if0050.makanandaerah.model.Food
 import org.d3if0050.makanandaerah.network.ApiStatus
-import org.d3if0050.makanandaerah.network.HewanApi
+import org.d3if0050.makanandaerah.network.FoodApi
 import java.io.ByteArrayOutputStream
 
 class MainViewModel : ViewModel() {
@@ -29,7 +29,7 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO){
             status.value = ApiStatus.LOADING
             try {
-                data.value = HewanApi.service.getHewan(userId = userId)
+                data.value = FoodApi.service.getFood(userId = userId)
                 status.value = ApiStatus.SUCCESS
                 Log.d("MainViewModel", "${data.value}")
             }catch (e:Exception){
@@ -39,16 +39,15 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun saveData(userId: String, nama: String, namaLatin: String, bitmap: Bitmap, mine: Int = 1){
+    fun saveData(userId: String, nama: String, asal: String, bitmap: Bitmap){
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = HewanApi.service.postHewan(
+                val result = FoodApi.service.postFood(
                     userId = userId,
                     nama = nama.toRequestBody("text/plain".toMediaTypeOrNull()),
-                    namaLatin = namaLatin.toRequestBody("text/plain".toMediaTypeOrNull()),
-                    image = bitmap.toMultipartBody(),
-                    mine = mine.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-                )
+                    asal = asal.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    image = bitmap.toMultipartBody())
+
                 if (result.status == "success")
                     retrieveData(userId = userId)
                 else
@@ -63,7 +62,7 @@ class MainViewModel : ViewModel() {
     fun deletingData(userId: String,id: Long){
         viewModelScope.launch(Dispatchers.IO){
             try {
-                val result = HewanApi.service.deleteHewan(userId = userId,id = id.toString())
+                val result = FoodApi.service.deleteFood(userId = userId,id = id.toString())
                 if (result.status == "success")
                     retrieveData(userId = userId)
                 else

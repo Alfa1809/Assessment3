@@ -3,12 +3,14 @@
     <string name="gambar">Gambar %1$s</string>
     <string name="error">Gagal memuat data.. Koneksi error.</string>
     <string name="try_again">Coba lagi</string>
+
     <string name="profil">Profil</string>
     <string name="tutup">Tutup</string>
     <string name="logout">Logout</string>
-    <string name="tambah_hewan">Tambah Hewan</string>
-    <string name="nama">Nama</string>
-    <string name="nama_latin">Nama latin</string>
+
+    <string name="tambah_makanan">Tambah Makanan</string>
+    <string name="nama">Nama Makanan</string>
+    <string name="asal">Asal Makanan</string>
     <string name="batal">Batal</string>
     <string name="simpan">Simpan</string>
     <string name="hapus">Delete</string>

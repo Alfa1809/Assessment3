@@ -82,7 +82,7 @@ import org.d3if0050.makanandaerah.ui.theme.MakananDaerahTheme
 import org.d3if0050.makanandaerah.model.Food
 import org.d3if0050.makanandaerah.model.User
 import org.d3if0050.makanandaerah.network.ApiStatus
-import org.d3if0050.makanandaerah.network.HewanApi
+import org.d3if0050.makanandaerah.network.FoodApi
 import org.d3if0050.makanandaerah.network.UserDataStore
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,7 +94,7 @@ fun MainScreen() {
     var showDialog by remember {
         mutableStateOf(false)
     }
-    var showHewanDialog by remember {
+    var showFoodDialog by remember {
         mutableStateOf(false)
     }
 
@@ -104,7 +104,7 @@ fun MainScreen() {
 
     val launcher = rememberLauncherForActivityResult(contract = CropImageContract()) {
         bitmap = getCroppedImage(context.contentResolver, it)
-        if (bitmap != null) showHewanDialog = true
+        if (bitmap != null) showFoodDialog = true
     }
 
     val viewModel : MainViewModel = viewModel()
@@ -153,7 +153,7 @@ fun MainScreen() {
                 )
                 launcher.launch(options)
             }) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(id = R.string.tambah_hewan))
+                Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(id = R.string.tambah_makanan))
             }
         }
     ){paddingValues ->
@@ -174,14 +174,13 @@ fun MainScreen() {
             }
         }
 
-        if (showHewanDialog){
+        if (showFoodDialog){
             FoodDialog(
                 bitmap = bitmap,
-                onDismissRequest = { showHewanDialog = false },
-                onConfirmation = { nama, namaLatin ->
-                    //Log.d("TAMBAH", "$nama $namaLatin ditambahkan.")
-                    showHewanDialog = false
-                    viewModel.saveData(user.email, nama, namaLatin, bitmap!!)
+                onDismissRequest = { showFoodDialog = false },
+                onConfirmation = { nama, asal ->
+                    showFoodDialog = false
+                    viewModel.saveData(user.email, nama, asal, bitmap!!)
                 })
         }
 
@@ -241,7 +240,7 @@ fun ListItem(food: Food, user: User, viewModel: MainViewModel) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(
-                    HewanApi.getHewanUrl(food.imageId)
+                    FoodApi.getFoodUrl(food.imageId)
                 )
                 .crossfade(true)
                 .build(),
@@ -264,13 +263,13 @@ fun ListItem(food: Food, user: User, viewModel: MainViewModel) {
                 Text(text = food.namaMakanan, fontWeight = FontWeight.Bold, color = Color.White)
                 Text(text = food.asalMakanan, fontStyle = FontStyle.Italic, fontSize = 14.sp, color = Color.White)
             }
-            if (food.mine == 1){
+
                 IconButton(onClick = {
                     onShowDeleting = true
                 }) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = stringResource(id = R.string.hapus), tint = MaterialTheme.colorScheme.surface)
                 }
-            }
+
             if (onShowDeleting){
                 DeleteDialog(onDismissRequest = { onShowDeleting = false }, onConfirmation = {
                     onShowDeleting = false

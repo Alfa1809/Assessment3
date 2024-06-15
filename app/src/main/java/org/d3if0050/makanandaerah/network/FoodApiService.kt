@@ -7,16 +7,15 @@ import org.d3if0050.makanandaerah.model.Food
 import org.d3if0050.makanandaerah.model.OpStatus
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.DELETE
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
-import retrofit2.http.Query
 
-//private const val BASE_URL = "https://raw.githubusercontent.com/" + "indraazimi/mobpro1-compose/static-api/"
-private const val BASE_URL = "https://gh.d3ifcool.org/"
+private const val BASE_URL = "https://rest-api-alfa1809-foods.000webhostapp.com/api/"
 
 private val moshi = Moshi.Builder()
     .add(com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory())
@@ -26,35 +25,35 @@ private val retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(BASE_URL)
     .build()
-interface HewanApiService {
+interface FoodApiService {
     //@GET("static-api.json")
-    @GET("hewan.php")
-    suspend fun getHewan(
+    @GET("foods.php")
+    suspend fun getFood(
         @Header("Authorization") userId: String
     ):List<Food>
 
     @Multipart
-    @POST("hewan.php")
-    suspend fun postHewan(
+    @POST("foods.php")
+    suspend fun postFood(
         @Header("Authorization") userId: String,
         @Part("nama") nama: RequestBody,
-        @Part("namaLatin") namaLatin: RequestBody,
-        @Part image: MultipartBody.Part,
-        @Part ("mine")mine: RequestBody
+        @Part("asal") asal: RequestBody,
+        @Part image: MultipartBody.Part
     ): OpStatus
 
-    @DELETE("hewan.php")
-    suspend fun deleteHewan(
+    @FormUrlEncoded
+    @POST("deleteFoods.php")
+    suspend fun deleteFood(
         @Header("Authorization") userId: String,
-        @Query("id") id: String
+        @Field("id") id: String
     ) : OpStatus
 }
 
-object HewanApi{
-    val service: HewanApiService by lazy {
-        retrofit.create(HewanApiService::class.java)
+object FoodApi{
+    val service: FoodApiService by lazy {
+        retrofit.create(FoodApiService::class.java)
     }
-    fun getHewanUrl(imageId: String): String{
+    fun getFoodUrl(imageId: String): String{
         //return "$BASE_URL$imageId.jpg"
         return "${BASE_URL}image.php?id=$imageId"
     }
@@ -62,3 +61,4 @@ object HewanApi{
 
 enum class ApiStatus{
     LOADING, SUCCESS, FAILED
+}

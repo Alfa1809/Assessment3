@@ -35,7 +35,7 @@ import org.d3if0050.makanandaerah.R
 @Composable
 fun FoodDialog(bitmap: Bitmap?,onDismissRequest: ()->Unit, onConfirmation:(String,String)->Unit) {
     var nama by remember { mutableStateOf("") }
-    var namaLatin by remember {
+    var asal by remember {
         mutableStateOf("")
     }
     Dialog(onDismissRequest = {
@@ -58,10 +58,10 @@ fun FoodDialog(bitmap: Bitmap?,onDismissRequest: ()->Unit, onConfirmation:(Strin
                     ),
                     modifier = Modifier.padding(top = 8.dp)
                 )
-                OutlinedTextField(value = namaLatin, onValueChange = {
-                    namaLatin = it
+                OutlinedTextField(value = asal, onValueChange = {
+                    asal = it
                 }, label = {
-                    Text(text = stringResource(id = R.string.nama_latin))
+                    Text(text = stringResource(id = R.string.asal))
                 },
                     maxLines = 1,
                     keyboardOptions = KeyboardOptions(
@@ -76,7 +76,7 @@ fun FoodDialog(bitmap: Bitmap?,onDismissRequest: ()->Unit, onConfirmation:(Strin
                     OutlinedButton(onClick = { onDismissRequest() }, modifier = Modifier.padding(8.dp)) {
                         Text(text = stringResource(id = R.string.batal))
                     }
-                    OutlinedButton(onClick = { onConfirmation(nama,namaLatin) }, enabled = nama.isNotEmpty() && namaLatin.isNotEmpty(), modifier = Modifier.padding(8.dp)) {
+                    OutlinedButton(onClick = { onConfirmation(nama,asal) }, enabled = nama.isNotEmpty() && asal.isNotEmpty(), modifier = Modifier.padding(8.dp)) {
                         Text(text = stringResource(id = R.string.simpan))
                     }
                 }
